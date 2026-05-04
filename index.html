@@ -54,9 +54,7 @@
   .btn:active { transform: scale(0.97); }
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
   .btn-danger { color: var(--danger); border-color: var(--danger); }
-  .btn-danger:active { background: var(--danger-bg); }
   .btn-success { color: var(--success); border-color: var(--success); }
-  .btn-success:active { background: var(--success-bg); }
   .btn-info { color: var(--info); border-color: var(--info); }
   .badge { font-size: 11px; padding: 3px 9px; border-radius: 99px; font-weight: 500; white-space: nowrap; }
   .badge-ok { background: var(--success-bg); color: var(--success); }
@@ -71,27 +69,25 @@
   .item-qty { font-size: 13px; color: var(--text2); min-width: 70px; text-align: right; }
   .empty-state { padding: 28px; text-align: center; color: var(--text2); font-size: 14px; }
   .cat-chip { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 99px; background: var(--info-bg); color: var(--info); margin-left: 4px; vertical-align: middle; }
-  /* Camera fix for mobile */
-  #video-wrap { display: none; margin-bottom: 10px; position: relative; width: 100%; background: #000; border-radius: var(--radius); overflow: hidden; }
-  #video { width: 100%; height: 280px; object-fit: cover; display: block; }
-  .scan-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 200px; height: 120px; border: 2px solid #fff; border-radius: 8px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.4); pointer-events: none; }
-  .scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #f00; animation: scan 2s linear infinite; }
-  @keyframes scan { 0%{top:0} 100%{top:100%} }
-  #scan-box { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--text2); font-size: 14px; cursor: pointer; margin-bottom: 10px; }
+  #video-wrap { display: none; margin-bottom: 10px; border-radius: var(--radius); overflow: hidden; background: #000; position: relative; }
+  #video { width: 100%; height: 300px; object-fit: cover; display: block; }
+  #scan-canvas { display: none; }
+  .scan-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .scan-frame { width: 220px; height: 130px; border: 2px solid #fff; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
+  .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: #f33; animation: scanline 1.8s ease-in-out infinite; }
+  @keyframes scanline { 0%,100%{top:5%} 50%{top:90%} }
+  #scan-box { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 28px; text-align: center; color: var(--text2); font-size: 14px; cursor: pointer; margin-bottom: 10px; }
   #scan-feedback { display: none; padding: 12px 14px; border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 10px; font-weight: 500; }
   .divider { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: var(--text3); font-size: 12px; }
   .divider::before, .divider::after { content:''; flex:1; height:0.5px; background:var(--border); }
   .log-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; gap: 8px; }
   .log-row:last-child { border-bottom: none; }
-  .log-name { font-weight: 500; }
-  .log-time { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  /* Modal */
-  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-bg.open { display: flex; }
   .modal { background: var(--bg); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .modal-title { font-size: 16px; font-weight: 600; }
-  .modal-close { font-size: 22px; background: none; border: none; color: var(--text2); padding: 0 4px; }
+  .modal-close { font-size: 24px; background: none; border: none; color: var(--text2); padding: 0 4px; line-height: 1; }
   #barcode-area { display: none; }
   .barcode-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; text-align: center; }
   .barcode-card canvas { max-width: 100%; background: white; border-radius: var(--radius-sm); padding: 8px; }
@@ -105,18 +101,13 @@
 <body>
 <div class="app-shell">
   <div class="app-header">
-    <div>
-      <h1>🍽️ Gtown Inventory</h1>
-      <p id="date-display"></p>
-    </div>
+    <div><h1>🍽️ Gtown Inventory</h1><p id="date-display"></p></div>
   </div>
-
   <div class="metrics">
     <div class="metric"><div class="metric-label">Total items</div><div class="metric-value" id="m-total">0</div></div>
     <div class="metric"><div class="metric-label">Low stock</div><div class="metric-value" id="m-low" style="color:var(--warn);">0</div></div>
     <div class="metric"><div class="metric-label">Scans today</div><div class="metric-value" id="m-scans">0</div></div>
   </div>
-
   <div class="tabs">
     <button class="tab active" onclick="showTab('inventory')">📦 Stock</button>
     <button class="tab" onclick="showTab('add')">➕ Add</button>
@@ -125,64 +116,39 @@
     <button class="tab" onclick="showTab('settings')">⚙️ Settings</button>
   </div>
 
-  <!-- INVENTORY -->
   <div class="section active" id="tab-inventory">
     <div class="card" style="padding:10px 12px;">
       <div class="row">
         <input type="text" id="search" placeholder="Search..." style="flex:1;margin:0;" oninput="renderInventory()">
-        <select id="filter-cat" style="width:130px;margin:0;" onchange="renderInventory()">
-          <option value="">All</option>
-        </select>
+        <select id="filter-cat" style="width:130px;margin:0;" onchange="renderInventory()"><option value="">All</option></select>
       </div>
     </div>
-    <div class="card" id="inventory-list">
-      <div class="empty-state">No items yet.<br>Tap "Add" to get started.</div>
-    </div>
+    <div class="card" id="inventory-list"><div class="empty-state">No items yet.<br>Tap "Add" to get started.</div></div>
   </div>
 
-  <!-- ADD ITEM -->
   <div class="section" id="tab-add">
     <div class="card">
       <h3>New inventory item</h3>
       <label>Item name</label>
       <input type="text" id="item-name" placeholder="e.g. Frozen fries 2.5kg">
-
       <div class="grid2">
-        <div>
-          <label>Category</label>
-          <select id="item-cat"></select>
-        </div>
-        <div>
-          <label>Unit type</label>
+        <div><label>Category</label><select id="item-cat"></select></div>
+        <div><label>Unit type</label>
           <select id="item-unit">
-            <option value="kg">kg</option>
-            <option value="g">g (grams)</option>
-            <option value="units">units / pieces</option>
-            <option value="portions">portions</option>
-            <option value="L">litres</option>
-            <option value="bags">bags</option>
-            <option value="boxes">boxes</option>
+            <option value="kg">kg</option><option value="g">g (grams)</option>
+            <option value="units">units / pieces</option><option value="portions">portions</option>
+            <option value="L">litres</option><option value="bags">bags</option><option value="boxes">boxes</option>
           </select>
         </div>
       </div>
-
       <div class="grid2">
-        <div>
-          <label>Starting quantity</label>
-          <input type="number" id="item-qty" min="0" step="0.1" placeholder="e.g. 10">
-        </div>
-        <div>
-          <label>Low stock alert at</label>
-          <input type="number" id="item-low" min="0" step="0.1" placeholder="e.g. 2">
-        </div>
+        <div><label>Starting quantity</label><input type="number" id="item-qty" min="0" step="0.1" placeholder="e.g. 10"></div>
+        <div><label>Low stock alert at</label><input type="number" id="item-low" min="0" step="0.1" placeholder="e.g. 2"></div>
       </div>
-
       <label>Each scan removes</label>
       <input type="number" id="item-step" min="0.1" step="0.1" value="1">
-
       <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="addItem()">✅ Add item & generate barcode</button>
     </div>
-
     <div id="barcode-area">
       <div class="barcode-card">
         <p style="font-size:12px;color:var(--text2);margin-bottom:8px;" id="barcode-label"></p>
@@ -193,38 +159,31 @@
     </div>
   </div>
 
-  <!-- SCAN -->
   <div class="section" id="tab-scan">
     <div class="card">
       <h3>Scan a barcode</h3>
-
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Point camera at a barcode label from this app.</p>
       <div id="video-wrap">
-        <video id="video" autoplay playsinline muted></video>
-        <div class="scan-overlay"><div class="scan-line"></div></div>
-        <button class="btn btn-danger" style="width:100%;margin-top:8px;" onclick="stopCamera()">⏹ Stop camera</button>
+        <video id="video" autoplay playsinline muted webkit-playsinline x5-playsinline></video>
+        <canvas id="scan-canvas"></canvas>
+        <div class="scan-overlay"><div class="scan-frame"><div class="scan-line"></div></div></div>
+        <button class="btn btn-danger" style="width:100%;border-radius:0;" onclick="stopCamera()">⏹ Stop camera</button>
       </div>
-
       <div id="scan-box" onclick="startCamera()">
-        <div style="font-size:28px;margin-bottom:8px;">📷</div>
-        Tap to open camera scanner
+        <div style="font-size:32px;margin-bottom:8px;">📷</div>
+        <div style="font-weight:500;margin-bottom:4px;">Tap to open camera</div>
+        <div style="font-size:12px;color:var(--text3);">Works on iPhone & Android</div>
       </div>
-
       <div id="scan-feedback"></div>
-
       <div class="divider">or enter code manually</div>
-
       <div class="row">
         <input type="text" id="manual-code" placeholder="Type barcode ID..." style="flex:1;margin:0;" onkeydown="if(event.key==='Enter')processCode(this.value.trim())">
         <button class="btn btn-primary" onclick="processCode(document.getElementById('manual-code').value.trim())">Use</button>
       </div>
     </div>
-
     <div class="card" id="scan-detail" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div>
-          <p style="font-size:11px;color:var(--text2);">Scanned item</p>
-          <p style="font-size:16px;font-weight:600;" id="sd-name">-</p>
-        </div>
+        <div><p style="font-size:11px;color:var(--text2);">Scanned item</p><p style="font-size:16px;font-weight:600;" id="sd-name">-</p></div>
         <span id="sd-badge" class="badge">-</span>
       </div>
       <div class="grid2" style="margin-bottom:12px;">
@@ -237,13 +196,12 @@
         <button class="btn btn-success" style="flex:1;" onclick="adjustItem('add')">+ Add</button>
       </div>
       <div class="row">
-        <input type="number" id="adj-amt" step="0.1" placeholder="Custom amount (- to remove)..." style="flex:1;margin:0;">
+        <input type="number" id="adj-amt" step="0.1" placeholder="Custom amount..." style="flex:1;margin:0;">
         <button class="btn btn-primary" onclick="applyAdj()">Apply</button>
       </div>
     </div>
   </div>
 
-  <!-- LOG -->
   <div class="section" id="tab-log">
     <div class="card" style="padding:10px 14px;">
       <div class="row" style="justify-content:space-between;">
@@ -251,76 +209,58 @@
         <button class="btn btn-danger" style="font-size:12px;padding:5px 10px;" onclick="clearLog()">Clear log</button>
       </div>
     </div>
-    <div class="card" id="log-list">
-      <div class="empty-state">No usage recorded yet.</div>
-    </div>
+    <div class="card" id="log-list"><div class="empty-state">No usage recorded yet.</div></div>
   </div>
 
-  <!-- SETTINGS -->
   <div class="section" id="tab-settings">
     <div class="card">
       <h3>Custom categories</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Add your own categories below. Default ones are always included.</p>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Add your own categories here.</p>
       <div class="row" style="margin-bottom:10px;">
-        <input type="text" id="new-cat-input" placeholder="e.g. Spices, Desserts, Packaging..." style="flex:1;margin:0;">
+        <input type="text" id="new-cat-input" placeholder="e.g. Spices, Desserts..." style="flex:1;margin:0;">
         <button class="btn btn-primary" onclick="addCategory()">Add</button>
       </div>
       <div id="cat-list"></div>
     </div>
     <div class="card">
       <h3>Data</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Export your inventory as a backup file.</p>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Export a backup of your inventory.</p>
       <div class="row">
         <button class="btn btn-info" style="flex:1;" onclick="exportData()">📤 Export backup</button>
-        <button class="btn btn-danger" style="flex:1;" onclick="resetAll()">🗑️ Reset everything</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="resetAll()">🗑️ Reset all</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- EDIT ITEM MODAL -->
 <div class="modal-bg" id="edit-modal">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">Edit item</span>
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
-    <label>Item name</label>
-    <input type="text" id="edit-name">
+    <label>Item name</label><input type="text" id="edit-name">
     <div class="grid2">
-      <div>
-        <label>Category</label>
-        <select id="edit-cat"></select>
-      </div>
-      <div>
-        <label>Unit</label>
+      <div><label>Category</label><select id="edit-cat"></select></div>
+      <div><label>Unit</label>
         <select id="edit-unit">
-          <option value="kg">kg</option>
-          <option value="g">g (grams)</option>
-          <option value="units">units / pieces</option>
-          <option value="portions">portions</option>
-          <option value="L">litres</option>
-          <option value="bags">bags</option>
-          <option value="boxes">boxes</option>
+          <option value="kg">kg</option><option value="g">g (grams)</option>
+          <option value="units">units / pieces</option><option value="portions">portions</option>
+          <option value="L">litres</option><option value="bags">bags</option><option value="boxes">boxes</option>
         </select>
       </div>
     </div>
-    <label>Current quantity</label>
-    <input type="number" id="edit-qty" min="0" step="0.1">
-    <label>Low stock alert at</label>
-    <input type="number" id="edit-low" min="0" step="0.1">
-    <label>Each scan removes</label>
-    <input type="number" id="edit-step" min="0.1" step="0.1">
-
-    <p style="font-size:12px;color:var(--text2);margin-bottom:8px;margin-top:4px;">Quick stock adjustment</p>
-    <div class="row" style="margin-bottom:10px;">
-      <input type="number" id="edit-add-amt" step="0.1" placeholder="Amount to add to stock..." style="flex:1;margin:0;">
+    <label>Current quantity</label><input type="number" id="edit-qty" min="0" step="0.1">
+    <label>Low stock alert at</label><input type="number" id="edit-low" min="0" step="0.1">
+    <label>Each scan removes</label><input type="number" id="edit-step" min="0.1" step="0.1">
+    <p style="font-size:12px;color:var(--text2);margin-bottom:6px;margin-top:2px;">Quick restock</p>
+    <div class="row" style="margin-bottom:12px;">
+      <input type="number" id="edit-add-amt" step="0.1" placeholder="Amount to add..." style="flex:1;margin:0;">
       <button class="btn btn-success" onclick="quickAddStock()">+ Add stock</button>
     </div>
-
-    <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn btn-primary" style="flex:1;padding:11px;" onclick="saveEdit()">💾 Save changes</button>
-      <button class="btn" style="padding:11px;" onclick="viewItemBarcode()">🏷️ Barcode</button>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;padding:11px;" onclick="saveEdit()">💾 Save</button>
+      <button class="btn" style="padding:11px;" onclick="viewItemBarcode()">🏷️</button>
       <button class="btn btn-danger" style="padding:11px;" onclick="deleteEditItem()">🗑️</button>
     </div>
   </div>
@@ -333,106 +273,101 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <script>
-let items = [], log = [], scansToday = 0, activeId = null, editId = null;
-const DEFAULT_CATS = ['meat','vegetables','fries','dairy','drinks','sauces','bread','other'];
-let customCats = [];
+let items=[], log=[], scansToday=0, activeId=null, editId=null, customCats=[];
+let cameraStream=null, scanInterval=null, zxingReader=null;
+const DEFAULT_CATS=['meat','vegetables','fries','dairy','drinks','sauces','bread','other'];
+const catEmoji={meat:'🥩',vegetables:'🥦',fries:'🍟',dairy:'🧀',drinks:'🥤',sauces:'🫙',bread:'🍞',other:'📦'};
 
-function today() { return new Date().toISOString().slice(0,10); }
-function genId() { return 'RI' + Math.random().toString(36).substr(2,9).toUpperCase(); }
-function fmt(n) { return parseFloat(parseFloat(n).toFixed(3)); }
-function allCats() { return [...DEFAULT_CATS, ...customCats]; }
-const catEmoji = { meat:'🥩', vegetables:'🥦', fries:'🍟', dairy:'🧀', drinks:'🥤', sauces:'🫙', bread:'🍞', other:'📦' };
-function catLabel(c) { return (catEmoji[c] || '🏷️') + ' ' + c.charAt(0).toUpperCase() + c.slice(1); }
+function today(){return new Date().toISOString().slice(0,10);}
+function genId(){return 'RI'+Math.random().toString(36).substr(2,9).toUpperCase();}
+function fmt(n){return parseFloat(parseFloat(n).toFixed(3));}
+function allCats(){return [...DEFAULT_CATS,...customCats];}
+function catLabel(c){return (catEmoji[c]||'🏷️')+' '+c.charAt(0).toUpperCase()+c.slice(1);}
 
-function save() {
-  try {
-    localStorage.setItem('ri_items', JSON.stringify(items));
-    localStorage.setItem('ri_log', JSON.stringify(log));
-    localStorage.setItem('ri_cats', JSON.stringify(customCats));
-    localStorage.setItem('ri_scans_' + today(), scansToday);
-  } catch(e) {}
+function save(){
+  try{
+    localStorage.setItem('ri_items',JSON.stringify(items));
+    localStorage.setItem('ri_log',JSON.stringify(log));
+    localStorage.setItem('ri_cats',JSON.stringify(customCats));
+    localStorage.setItem('ri_scans_'+today(),scansToday);
+  }catch(e){}
+}
+function load(){
+  try{
+    items=JSON.parse(localStorage.getItem('ri_items')||'[]');
+    log=JSON.parse(localStorage.getItem('ri_log')||'[]');
+    customCats=JSON.parse(localStorage.getItem('ri_cats')||'[]');
+    scansToday=parseInt(localStorage.getItem('ri_scans_'+today())||'0');
+  }catch(e){items=[];log=[];customCats=[];scansToday=0;}
 }
 
-function load() {
-  try {
-    items = JSON.parse(localStorage.getItem('ri_items') || '[]');
-    log = JSON.parse(localStorage.getItem('ri_log') || '[]');
-    customCats = JSON.parse(localStorage.getItem('ri_cats') || '[]');
-    scansToday = parseInt(localStorage.getItem('ri_scans_' + today()) || '0');
-  } catch(e) { items=[]; log=[]; customCats=[]; scansToday=0; }
-}
-
-function populateCatSelects() {
-  const cats = allCats();
-  ['item-cat','edit-cat','filter-cat'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const prev = el.value;
-    const isFilter = id === 'filter-cat';
-    el.innerHTML = (isFilter ? '<option value="">All categories</option>' : '') +
-      cats.map(c => `<option value="${c}">${catLabel(c)}</option>`).join('');
-    if (prev) el.value = prev;
+function populateCatSelects(){
+  const cats=allCats();
+  ['item-cat','edit-cat'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const prev=el.value;
+    el.innerHTML=cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
+    if(prev)el.value=prev;
   });
+  const fc=document.getElementById('filter-cat');
+  const fp=fc.value;
+  fc.innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
+  if(fp)fc.value=fp;
 }
 
-function renderCatList() {
-  const el = document.getElementById('cat-list');
-  if (!customCats.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text3);">No custom categories yet.</p>'; return; }
-  el.innerHTML = customCats.map((c,i) => `<div class="row" style="padding:6px 0;border-bottom:0.5px solid var(--border);justify-content:space-between;">
+function renderCatList(){
+  const el=document.getElementById('cat-list');
+  if(!customCats.length){el.innerHTML='<p style="font-size:13px;color:var(--text3);">No custom categories yet.</p>';return;}
+  el.innerHTML=customCats.map((c,i)=>`<div class="row" style="padding:7px 0;border-bottom:0.5px solid var(--border);justify-content:space-between;">
     <span style="font-size:14px;">${catLabel(c)}</span>
     <button class="btn btn-danger" style="font-size:12px;padding:4px 10px;" onclick="deleteCat(${i})">Remove</button>
   </div>`).join('');
 }
 
-function addCategory() {
-  const val = document.getElementById('new-cat-input').value.trim().toLowerCase();
-  if (!val) return;
-  if (allCats().includes(val)) { alert('Category already exists.'); return; }
+function addCategory(){
+  const val=document.getElementById('new-cat-input').value.trim().toLowerCase();
+  if(!val)return;
+  if(allCats().includes(val)){alert('Already exists.');return;}
   customCats.push(val);
-  document.getElementById('new-cat-input').value = '';
-  save(); populateCatSelects(); renderCatList();
+  document.getElementById('new-cat-input').value='';
+  save();populateCatSelects();renderCatList();
+}
+function deleteCat(i){if(!confirm('Remove?'))return;customCats.splice(i,1);save();populateCatSelects();renderCatList();}
+
+function updateMetrics(){
+  document.getElementById('m-total').textContent=items.length;
+  document.getElementById('m-low').textContent=items.filter(i=>i.qty>0&&i.qty<=i.low).length;
+  document.getElementById('m-scans').textContent=scansToday;
 }
 
-function deleteCat(i) {
-  if (!confirm('Remove this category?')) return;
-  customCats.splice(i,1);
-  save(); populateCatSelects(); renderCatList();
-}
-
-function updateMetrics() {
-  document.getElementById('m-total').textContent = items.length;
-  document.getElementById('m-low').textContent = items.filter(i => i.qty > 0 && i.qty <= i.low).length;
-  document.getElementById('m-scans').textContent = scansToday;
-}
-
-function showTab(name) {
-  const names = ['inventory','add','scan','log','settings'];
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function showTab(name){
+  const names=['inventory','add','scan','log','settings'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  if (name==='inventory') renderInventory();
-  if (name==='log') renderLog();
-  if (name==='settings') renderCatList();
+  if(name!=='scan')stopCamera();
+  if(name==='inventory')renderInventory();
+  if(name==='log')renderLog();
+  if(name==='settings')renderCatList();
   updateMetrics();
 }
 
-function stockStatus(item) {
-  if (item.qty <= 0) return ['badge-empty','Out of stock'];
-  if (item.qty <= item.low) return ['badge-low','Low stock'];
-  return ['badge-ok','In stock'];
+function stockStatus(item){
+  if(item.qty<=0)return['badge-empty','Out of stock'];
+  if(item.qty<=item.low)return['badge-low','Low stock'];
+  return['badge-ok','In stock'];
 }
 
-function renderInventory() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const cat = document.getElementById('filter-cat').value;
-  const filtered = items.filter(i => (!q || i.name.toLowerCase().includes(q)) && (!cat || i.cat===cat));
-  const el = document.getElementById('inventory-list');
-  if (!filtered.length) { el.innerHTML = '<div class="empty-state">No items found.</div>'; return; }
-  el.innerHTML = filtered.map(i => {
-    const [cls, label] = stockStatus(i);
-    return `<div class="item-row" onclick="openEditModal('${i.id}')">
+function renderInventory(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const cat=document.getElementById('filter-cat').value;
+  const filtered=items.filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!cat||i.cat===cat));
+  const el=document.getElementById('inventory-list');
+  if(!filtered.length){el.innerHTML='<div class="empty-state">No items found.</div>';return;}
+  el.innerHTML=filtered.map(i=>{
+    const[cls,label]=stockStatus(i);
+    return`<div class="item-row" onclick="openEditModal('${i.id}')">
       <div class="item-info">
         <div class="item-name">${i.name}<span class="cat-chip">${i.cat}</span></div>
         <div class="item-meta">Tap to edit · step: ${i.step} ${i.unit}</div>
@@ -443,163 +378,214 @@ function renderInventory() {
   }).join('');
 }
 
-function addItem() {
-  const name = document.getElementById('item-name').value.trim();
-  if (!name) { alert('Please enter an item name.'); return; }
-  const qty = fmt(parseFloat(document.getElementById('item-qty').value) || 0);
-  const low = fmt(parseFloat(document.getElementById('item-low').value) || 1);
-  const step = fmt(parseFloat(document.getElementById('item-step').value) || 1);
-  const unit = document.getElementById('item-unit').value;
-  const cat = document.getElementById('item-cat').value;
-  const id = genId();
-  items.push({ id, name, cat, unit, qty, low, step });
-  save(); updateMetrics();
-  renderBarcodeFor(id, name);
-  document.getElementById('item-name').value = '';
-  document.getElementById('item-qty').value = '';
-  document.getElementById('item-low').value = '';
-  document.getElementById('item-step').value = '1';
+function addItem(){
+  const name=document.getElementById('item-name').value.trim();
+  if(!name){alert('Please enter an item name.');return;}
+  const qty=fmt(parseFloat(document.getElementById('item-qty').value)||0);
+  const low=fmt(parseFloat(document.getElementById('item-low').value)||1);
+  const step=fmt(parseFloat(document.getElementById('item-step').value)||1);
+  const unit=document.getElementById('item-unit').value;
+  const cat=document.getElementById('item-cat').value;
+  const id=genId();
+  items.push({id,name,cat,unit,qty,low,step});
+  save();updateMetrics();renderBarcodeFor(id,name);
+  document.getElementById('item-name').value='';
+  document.getElementById('item-qty').value='';
+  document.getElementById('item-low').value='';
+  document.getElementById('item-step').value='1';
 }
 
-function renderBarcodeFor(id, name) {
-  document.getElementById('barcode-area').style.display = 'block';
-  document.getElementById('barcode-label').textContent = name;
-  document.getElementById('barcode-code').textContent = id;
-  setTimeout(() => {
-    try { JsBarcode('#bc', id, { format:'CODE128', width:2.2, height:70, displayValue:true, fontSize:13, margin:10 }); } catch(e){}
-  }, 80);
+function renderBarcodeFor(id,name){
+  document.getElementById('barcode-area').style.display='block';
+  document.getElementById('barcode-label').textContent=name;
+  document.getElementById('barcode-code').textContent=id;
+  setTimeout(()=>{try{JsBarcode('#bc',id,{format:'CODE128',width:2.2,height:70,displayValue:true,fontSize:13,margin:10});}catch(e){}},80);
 }
 
-function printBarcode() {
-  const label = document.getElementById('barcode-label').textContent;
-  const code = document.getElementById('barcode-code').textContent;
-  const pz = document.getElementById('print-zone');
-  pz.style.display = 'block';
-  document.getElementById('print-label').textContent = label;
-  document.getElementById('print-code').textContent = code;
-  setTimeout(() => {
-    try { JsBarcode('#print-bc', code, { format:'CODE128', width:3, height:100, displayValue:true, fontSize:16, margin:12 }); } catch(e){}
-    setTimeout(() => { window.print(); pz.style.display='none'; }, 200);
-  }, 100);
+function printBarcode(){
+  const label=document.getElementById('barcode-label').textContent;
+  const code=document.getElementById('barcode-code').textContent;
+  const pz=document.getElementById('print-zone');
+  pz.style.display='block';
+  document.getElementById('print-label').textContent=label;
+  document.getElementById('print-code').textContent=code;
+  setTimeout(()=>{
+    try{JsBarcode('#print-bc',code,{format:'CODE128',width:3,height:100,displayValue:true,fontSize:16,margin:12});}catch(e){}
+    setTimeout(()=>{window.print();pz.style.display='none';},200);
+  },100);
 }
 
-// EDIT MODAL
-function openEditModal(id) {
-  const item = items.find(i => i.id===id);
-  if (!item) return;
-  editId = id;
-  document.getElementById('edit-name').value = item.name;
-  document.getElementById('edit-qty').value = item.qty;
-  document.getElementById('edit-low').value = item.low;
-  document.getElementById('edit-step').value = item.step;
-  document.getElementById('edit-unit').value = item.unit;
-  document.getElementById('edit-cat').value = item.cat;
-  document.getElementById('edit-add-amt').value = '';
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('edit-modal').classList.remove('open');
-  editId = null;
-}
-
-function saveEdit() {
-  const item = items.find(i => i.id===editId);
-  if (!item) return;
-  item.name = document.getElementById('edit-name').value.trim() || item.name;
-  item.cat = document.getElementById('edit-cat').value;
-  item.unit = document.getElementById('edit-unit').value;
-  item.qty = fmt(parseFloat(document.getElementById('edit-qty').value) || 0);
-  item.low = fmt(parseFloat(document.getElementById('edit-low').value) || 1);
-  item.step = fmt(parseFloat(document.getElementById('edit-step').value) || 1);
-  save(); renderInventory(); updateMetrics(); closeModal();
-}
-
-function quickAddStock() {
-  const item = items.find(i => i.id===editId);
-  if (!item) return;
-  const amt = parseFloat(document.getElementById('edit-add-amt').value);
-  if (!amt || isNaN(amt)) { alert('Enter an amount to add.'); return; }
-  item.qty = fmt(item.qty + amt);
-  document.getElementById('edit-qty').value = item.qty;
-  document.getElementById('edit-add-amt').value = '';
-  log.unshift({ time: new Date().toLocaleString(), name: item.name, cat: item.cat, action:'add', amount: amt, unit: item.unit, after: item.qty });
-  save(); updateMetrics();
-}
-
-function viewItemBarcode() {
-  const item = items.find(i => i.id===editId);
-  if (!item) return;
-  closeModal();
-  showTab('add');
-  renderBarcodeFor(item.id, item.name);
-}
-
-function deleteEditItem() {
-  if (!confirm('Delete this item?')) return;
-  items = items.filter(i => i.id!==editId);
-  save(); renderInventory(); updateMetrics(); closeModal();
-}
-
-// SCAN
-function processCode(code) {
-  if (!code) return;
-  const item = items.find(i => i.id===code);
-  const fb = document.getElementById('scan-feedback');
-  const det = document.getElementById('scan-detail');
-  if (!item) {
-    fb.style.display='block'; fb.style.background='var(--danger-bg)'; fb.style.color='var(--danger)';
-    fb.textContent='❌ Item not found: ' + code;
-    det.style.display='none'; return;
+// CAMERA — native, works on iOS Safari
+async function startCamera(){
+  const video=document.getElementById('video');
+  const vw=document.getElementById('video-wrap');
+  const sb=document.getElementById('scan-box');
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},
+      audio:false
+    });
+    cameraStream=stream;
+    video.srcObject=stream;
+    video.setAttribute('playsinline','');
+    video.setAttribute('webkit-playsinline','');
+    await video.play();
+    vw.style.display='block';
+    sb.style.display='none';
+    startDecoding();
+  }catch(err){
+    alert('Camera error: '+err.message+'\n\nMake sure you allow camera access when prompted.');
   }
-  activeId = item.id;
-  item.qty = fmt(Math.max(0, item.qty - item.step));
+}
+
+function stopCamera(){
+  if(scanInterval){clearInterval(scanInterval);scanInterval=null;}
+  if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
+  const video=document.getElementById('video');
+  video.srcObject=null;
+  document.getElementById('video-wrap').style.display='none';
+  document.getElementById('scan-box').style.display='block';
+}
+
+async function loadZXing(){
+  if(zxingReader)return true;
+  try{
+    const mod=await import('https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/+esm');
+    zxingReader=new mod.BrowserMultiFormatReader();
+    return true;
+  }catch(e){console.error('ZXing failed',e);return false;}
+}
+
+async function startDecoding(){
+  const ok=await loadZXing();
+  if(!ok){alert('Scanner library failed to load. Use manual code entry instead.');return;}
+  const video=document.getElementById('video');
+  const canvas=document.getElementById('scan-canvas');
+  const ctx=canvas.getContext('2d');
+  let lastCode='',lastTime=0;
+  scanInterval=setInterval(async()=>{
+    if(!cameraStream||video.readyState<2||video.videoWidth===0)return;
+    canvas.width=video.videoWidth;
+    canvas.height=video.videoHeight;
+    ctx.drawImage(video,0,0);
+    try{
+      const result=await zxingReader.decodeFromCanvas(canvas);
+      if(result){
+        const code=result.getText();
+        const now=Date.now();
+        if(code===lastCode&&now-lastTime<3000)return;
+        lastCode=code;lastTime=now;
+        stopCamera();
+        processCode(code);
+      }
+    }catch(e){}
+  },500);
+}
+
+function processCode(code){
+  if(!code)return;
+  const item=items.find(i=>i.id===code);
+  const fb=document.getElementById('scan-feedback');
+  const det=document.getElementById('scan-detail');
+  if(!item){
+    fb.style.display='block';fb.style.background='var(--danger-bg)';fb.style.color='var(--danger)';
+    fb.textContent='❌ Item not found: '+code;
+    det.style.display='none';return;
+  }
+  activeId=item.id;
+  item.qty=fmt(Math.max(0,item.qty-item.step));
   scansToday++;
-  log.unshift({ time: new Date().toLocaleString(), name: item.name, cat: item.cat, action:'scan', amount: -item.step, unit: item.unit, after: item.qty });
-  save(); updateMetrics();
-  fb.style.display='block'; fb.style.background='var(--success-bg)'; fb.style.color='var(--success)';
-  fb.textContent='✅ ' + item.name + ' — removed ' + item.step + ' ' + item.unit + '. Left: ' + item.qty + ' ' + item.unit;
+  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'scan',amount:-item.step,unit:item.unit,after:item.qty});
+  save();updateMetrics();
+  fb.style.display='block';fb.style.background='var(--success-bg)';fb.style.color='var(--success)';
+  fb.textContent='✅ '+item.name+' — removed '+item.step+' '+item.unit+'. Left: '+item.qty+' '+item.unit;
   refreshDetail(item);
   det.style.display='block';
   document.getElementById('manual-code').value='';
 }
 
-function refreshDetail(item) {
-  document.getElementById('sd-name').textContent = item.name;
-  document.getElementById('sd-qty').textContent = item.qty;
-  document.getElementById('sd-unit').textContent = item.unit;
-  const [cls,label] = stockStatus(item);
-  const b = document.getElementById('sd-badge');
-  b.className='badge '+cls; b.textContent=label;
+function refreshDetail(item){
+  document.getElementById('sd-name').textContent=item.name;
+  document.getElementById('sd-qty').textContent=item.qty;
+  document.getElementById('sd-unit').textContent=item.unit;
+  const[cls,label]=stockStatus(item);
+  const b=document.getElementById('sd-badge');
+  b.className='badge '+cls;b.textContent=label;
 }
 
-function adjustItem(type) {
-  const item = items.find(i => i.id===activeId);
-  if (!item) return;
-  const amt = type==='remove' ? -item.step : item.step;
-  item.qty = fmt(Math.max(0, item.qty+amt));
-  log.unshift({ time: new Date().toLocaleString(), name: item.name, cat: item.cat, action: type, amount: amt, unit: item.unit, after: item.qty });
-  save(); refreshDetail(item); updateMetrics();
+function adjustItem(type){
+  const item=items.find(i=>i.id===activeId);if(!item)return;
+  const amt=type==='remove'?-item.step:item.step;
+  item.qty=fmt(Math.max(0,item.qty+amt));
+  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:type,amount:amt,unit:item.unit,after:item.qty});
+  save();refreshDetail(item);updateMetrics();
 }
 
-function applyAdj() {
-  const item = items.find(i => i.id===activeId);
-  if (!item) return;
-  const amt = parseFloat(document.getElementById('adj-amt').value);
-  if (!amt || isNaN(amt)) return;
-  item.qty = fmt(Math.max(0, item.qty+amt));
-  log.unshift({ time: new Date().toLocaleString(), name: item.name, cat: item.cat, action: amt>0?'add':'remove', amount: amt, unit: item.unit, after: item.qty });
+function applyAdj(){
+  const item=items.find(i=>i.id===activeId);if(!item)return;
+  const amt=parseFloat(document.getElementById('adj-amt').value);
+  if(!amt||isNaN(amt))return;
+  item.qty=fmt(Math.max(0,item.qty+amt));
+  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:amt>0?'add':'remove',amount:amt,unit:item.unit,after:item.qty});
   document.getElementById('adj-amt').value='';
-  save(); refreshDetail(item); updateMetrics();
+  save();refreshDetail(item);updateMetrics();
 }
 
-function renderLog() {
-  const el = document.getElementById('log-list');
-  if (!log.length) { el.innerHTML='<div class="empty-state">No usage recorded yet.</div>'; return; }
-  el.innerHTML = log.slice(0,100).map(l => {
-    const plus = l.amount > 0;
-    return `<div class="log-row">
-      <div><div class="log-name">${l.name}</div><div class="log-time">${l.time}</div></div>
+function openEditModal(id){
+  const item=items.find(i=>i.id===id);if(!item)return;
+  editId=id;
+  document.getElementById('edit-name').value=item.name;
+  document.getElementById('edit-qty').value=item.qty;
+  document.getElementById('edit-low').value=item.low;
+  document.getElementById('edit-step').value=item.step;
+  document.getElementById('edit-unit').value=item.unit;
+  document.getElementById('edit-cat').value=item.cat;
+  document.getElementById('edit-add-amt').value='';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('edit-modal').classList.remove('open');editId=null;}
+
+function saveEdit(){
+  const item=items.find(i=>i.id===editId);if(!item)return;
+  item.name=document.getElementById('edit-name').value.trim()||item.name;
+  item.cat=document.getElementById('edit-cat').value;
+  item.unit=document.getElementById('edit-unit').value;
+  item.qty=fmt(parseFloat(document.getElementById('edit-qty').value)||0);
+  item.low=fmt(parseFloat(document.getElementById('edit-low').value)||1);
+  item.step=fmt(parseFloat(document.getElementById('edit-step').value)||1);
+  save();renderInventory();updateMetrics();closeModal();
+}
+
+function quickAddStock(){
+  const item=items.find(i=>i.id===editId);if(!item)return;
+  const amt=parseFloat(document.getElementById('edit-add-amt').value);
+  if(!amt||isNaN(amt)){alert('Enter an amount to add.');return;}
+  item.qty=fmt(item.qty+amt);
+  document.getElementById('edit-qty').value=item.qty;
+  document.getElementById('edit-add-amt').value='';
+  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'add',amount:amt,unit:item.unit,after:item.qty});
+  save();updateMetrics();
+}
+
+function viewItemBarcode(){
+  const item=items.find(i=>i.id===editId);if(!item)return;
+  closeModal();showTab('add');renderBarcodeFor(item.id,item.name);
+}
+
+function deleteEditItem(){
+  if(!confirm('Delete this item?'))return;
+  items=items.filter(i=>i.id!==editId);
+  save();renderInventory();updateMetrics();closeModal();
+}
+
+function renderLog(){
+  const el=document.getElementById('log-list');
+  if(!log.length){el.innerHTML='<div class="empty-state">No usage recorded yet.</div>';return;}
+  el.innerHTML=log.slice(0,100).map(l=>{
+    const plus=l.amount>0;
+    return`<div class="log-row">
+      <div><div style="font-weight:500;">${l.name}</div><div style="font-size:11px;color:var(--text3);">${l.time}</div></div>
       <div style="text-align:right;">
         <div style="font-weight:600;color:${plus?'var(--success)':'var(--danger)'};">${plus?'+':''}${l.amount} ${l.unit}</div>
         <div style="font-size:11px;color:var(--text3);">${l.after} left</div>
@@ -608,86 +594,28 @@ function renderLog() {
   }).join('');
 }
 
-function clearLog() {
-  if (!confirm('Clear all usage history?')) return;
-  log=[]; save(); renderLog();
-}
+function clearLog(){if(!confirm('Clear all usage history?'))return;log=[];save();renderLog();}
 
-function exportData() {
-  const data = JSON.stringify({ items, log, customCats }, null, 2);
-  const blob = new Blob([data], { type:'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'gtown-inventory-backup-' + today() + '.json';
+function exportData(){
+  const data=JSON.stringify({items,log,customCats},null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='gtown-inventory-'+today()+'.json';
   a.click();
 }
 
-function resetAll() {
-  if (!confirm('This will delete ALL items, log and categories. Are you sure?')) return;
-  items=[]; log=[]; customCats=[];
+function resetAll(){
+  if(!confirm('Delete ALL items, log and categories?'))return;
+  items=[];log=[];customCats=[];
   localStorage.clear();
-  renderInventory(); renderLog(); renderCatList(); updateMetrics();
+  renderInventory();renderLog();renderCatList();updateMetrics();
 }
 
-// CAMERA - fixed for mobile
-let quaggaRunning = false;
-function startCamera() {
-  if (quaggaRunning) return;
-  const vw = document.getElementById('video-wrap');
-  const sb = document.getElementById('scan-box');
-  vw.style.display='block'; sb.style.display='none';
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('date-display').textContent=new Date().toLocaleDateString('en-DE',{weekday:'long',day:'numeric',month:'long'});
 
-  Quagga.init({
-    inputStream: {
-      type: 'LiveStream',
-      target: document.getElementById('video'),
-      constraints: {
-        facingMode: 'environment',
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
-      }
-    },
-    locator: { patchSize: 'medium', halfSample: true },
-    numOfWorkers: 2,
-    decoder: { readers: ['code_128_reader','ean_reader','upc_reader'] },
-    locate: true
-  }, function(err) {
-    if (err) {
-      console.error(err);
-      stopCamera();
-      alert('Camera could not start. Please allow camera access and try again.');
-      return;
-    }
-    Quagga.start();
-    quaggaRunning = true;
-  });
-
-  let lastCode = '', lastTime = 0;
-  Quagga.onDetected(function(data) {
-    const code = data.codeResult.code;
-    const now = Date.now();
-    if (code === lastCode && now - lastTime < 2000) return;
-    lastCode = code; lastTime = now;
-    stopCamera();
-    processCode(code);
-  });
-}
-
-function stopCamera() {
-  try { Quagga.stop(); } catch(e){}
-  quaggaRunning = false;
-  document.getElementById('video-wrap').style.display='none';
-  document.getElementById('scan-box').style.display='block';
-}
-
-// close modal on bg click
-document.getElementById('edit-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-document.getElementById('date-display').textContent = new Date().toLocaleDateString('en-DE', { weekday:'long', day:'numeric', month:'long' });
-
-load(); populateCatSelects(); renderInventory(); updateMetrics();
+load();populateCatSelects();renderInventory();updateMetrics();
 </script>
 </body>
 </html>
