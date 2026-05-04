@@ -735,24 +735,41 @@ function renderTotal() {
       </div>`).join('');
   }
 
-  // Per branch cards
+  // Per branch cards with full item list
   const bcEl = document.getElementById('total-branch-cards');
   bcEl.innerHTML = branches.map(b => {
     const its = allItems[b.id]||[];
     const lowCount = its.filter(i=>i.qty>0&&i.qty<=i.low).length;
     const expCount = its.filter(i=>{const exp=calcExpiry(i.madeDate,i.shelfDays);return exp&&daysUntil(exp)<=3;}).length;
     const todayScans = (allScans[b.id]||{})[today()]||0;
+    const itemRows = its.length ? its.map(i => {
+      const [scls, slabel] = stockStatus(i);
+      const eb = expiryBadge(i);
+      const expBadge = eb ? `<span class="badge ${eb.cls}" style="font-size:9px;margin-left:4px;">${eb.label}</span>` : '';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--border);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${i.name}<span class="cat-chip">${i.cat}</span>${expBadge}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;">step: ${i.step} ${i.unit}</div>
+        </div>
+        <div style="font-size:12px;color:var(--text2);min-width:55px;text-align:right;">${i.qty} ${i.unit}</div>
+        <span class="badge ${scls}" style="font-size:9px;">${slabel}</span>
+      </div>`;
+    }).join('') : '<div style="padding:12px 0;font-size:13px;color:var(--text3);">No items in this branch yet.</div>';
+
     return `<div class="card">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div style="width:12px;height:12px;border-radius:50%;background:${b.color};"></div>
-        <span style="font-size:15px;font-weight:600;">${b.name}</span>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:12px;height:12px;border-radius:50%;background:${b.color};"></div>
+          <span style="font-size:15px;font-weight:600;">${b.name}</span>
+        </div>
+        <span style="font-size:11px;color:var(--text2);">Scans today: <strong>${todayScans}</strong></span>
       </div>
-      <div class="grid3">
+      <div class="grid3" style="margin-bottom:10px;">
         <div class="metric"><div class="metric-label">Items</div><div class="metric-value">${its.length}</div></div>
         <div class="metric"><div class="metric-label">Low stock</div><div class="metric-value" style="color:var(--warn);">${lowCount}</div></div>
         <div class="metric"><div class="metric-label">Expiring</div><div class="metric-value" style="color:var(--danger);">${expCount}</div></div>
       </div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">Scans today: <strong>${todayScans}</strong></div>
+      ${itemRows}
     </div>`;
   }).join('');
 
