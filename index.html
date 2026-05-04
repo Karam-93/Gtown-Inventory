@@ -29,15 +29,19 @@
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
   .app-shell { max-width: 720px; margin: 0 auto; padding: 12px; }
-  .app-header { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+  .app-header { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 10px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .app-header h1 { font-size: 17px; font-weight: 600; }
-  .app-header p { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-  .metric { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
-  .metric-label { font-size: 10px; color: var(--text2); margin-bottom: 3px; }
-  .metric-value { font-size: 20px; font-weight: 600; }
+  .app-header p { font-size: 11px; color: var(--text2); }
+  .branch-selector { display: flex; align-items: center; gap: 8px; }
+  .branch-selector select { margin: 0; font-weight: 600; font-size: 14px; width: auto; flex: 1; padding: 8px 12px; }
+  .branch-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+  .metric { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; text-align: center; }
+  .metric-label { font-size: 9px; color: var(--text2); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .metric-value { font-size: 18px; font-weight: 600; }
   .tabs { display: flex; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
-  .tab { flex: 1; padding: 10px 4px; border: none; background: none; font-size: 12px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab { flex: 1; padding: 10px 2px; border: none; background: none; font-size: 11px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; }
   .tab.active { color: var(--text); border-bottom-color: var(--text); background: var(--bg2); }
   .section { display: none; }
   .section.active { display: block; }
@@ -47,6 +51,7 @@
   input, select { width: 100%; padding: 9px 12px; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; -webkit-appearance: none; appearance: none; }
   input::placeholder { color: var(--text3); }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .row { display: flex; gap: 8px; align-items: center; }
   .row input, .row select { margin-bottom: 0; }
   button { cursor: pointer; font-family: inherit; }
@@ -56,79 +61,115 @@
   .btn-danger { color: var(--danger); border-color: var(--danger); }
   .btn-success { color: var(--success); border-color: var(--success); }
   .btn-info { color: var(--info); border-color: var(--info); }
-  .badge { font-size: 11px; padding: 3px 9px; border-radius: 99px; font-weight: 500; white-space: nowrap; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 500; white-space: nowrap; }
   .badge-ok { background: var(--success-bg); color: var(--success); }
   .badge-low { background: var(--warn-bg); color: var(--warn); }
   .badge-empty { background: var(--danger-bg); color: var(--danger); }
-  .item-row { display: flex; align-items: center; gap: 8px; padding: 11px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
+  .badge-fresh { background: var(--success-bg); color: var(--success); }
+  .badge-aging { background: var(--warn-bg); color: var(--warn); }
+  .badge-old { background: var(--danger-bg); color: var(--danger); }
+  .item-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
   .item-row:last-child { border-bottom: none; }
   .item-row:active { opacity: 0.7; }
   .item-info { flex: 1; min-width: 0; }
-  .item-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .item-qty { font-size: 13px; color: var(--text2); min-width: 70px; text-align: right; }
+  .item-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-meta { font-size: 10px; color: var(--text3); margin-top: 2px; }
+  .item-qty { font-size: 12px; color: var(--text2); min-width: 55px; text-align: right; }
   .empty-state { padding: 28px; text-align: center; color: var(--text2); font-size: 14px; }
-  .cat-chip { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 99px; background: var(--info-bg); color: var(--info); margin-left: 4px; vertical-align: middle; }
+  .cat-chip { display: inline-block; font-size: 9px; padding: 1px 5px; border-radius: 99px; background: var(--info-bg); color: var(--info); margin-left: 4px; vertical-align: middle; }
+  /* Camera */
   #video-wrap { display: none; margin-bottom: 10px; border-radius: var(--radius); overflow: hidden; background: #000; position: relative; }
-  #video { width: 100%; height: 300px; object-fit: cover; display: block; }
+  #video { width: 100%; height: 280px; object-fit: cover; display: block; }
   #scan-canvas { display: none; }
   .scan-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-  .scan-frame { width: 220px; height: 130px; border: 2px solid #fff; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
+  .scan-frame { width: 210px; height: 120px; border: 2px solid #fff; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
   .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: #f33; animation: scanline 1.8s ease-in-out infinite; }
   @keyframes scanline { 0%,100%{top:5%} 50%{top:90%} }
-  #scan-box { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 28px; text-align: center; color: var(--text2); font-size: 14px; cursor: pointer; margin-bottom: 10px; }
-  #scan-feedback { display: none; padding: 12px 14px; border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 10px; font-weight: 500; }
+  #scan-box { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--text2); font-size: 14px; cursor: pointer; margin-bottom: 10px; }
+  #scan-feedback { display: none; padding: 12px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 10px; font-weight: 500; }
   .divider { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: var(--text3); font-size: 12px; }
   .divider::before, .divider::after { content:''; flex:1; height:0.5px; background:var(--border); }
-  .log-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; gap: 8px; }
+  .log-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 0.5px solid var(--border); font-size: 12px; gap: 8px; }
   .log-row:last-child { border-bottom: none; }
+  /* Total view */
+  .total-item-row { padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .total-item-row:last-child { border-bottom: none; }
+  .total-item-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .branch-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .branch-pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; }
+  .warning-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+  .warning-row:last-child { border-bottom: none; }
+  /* Modals */
   .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-bg.open { display: flex; }
-  .modal { background: var(--bg); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; }
+  .modal { background: var(--bg); border-radius: var(--radius) var(--radius) 0 0; padding: 20px; width: 100%; max-width: 720px; max-height: 92vh; overflow-y: auto; }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .modal-title { font-size: 16px; font-weight: 600; }
   .modal-close { font-size: 24px; background: none; border: none; color: var(--text2); padding: 0 4px; line-height: 1; }
+  #action-modal { align-items: center; }
+  #action-modal .modal { border-radius: var(--radius); max-width: 380px; margin: auto; }
+  .action-btn { width: 100%; padding: 14px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; margin-bottom: 10px; border: none; cursor: pointer; text-align: left; }
+  .action-use { background: var(--danger-bg); color: var(--danger); }
+  .action-restock { background: var(--success-bg); color: var(--success); }
   #barcode-area { display: none; }
   .barcode-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; text-align: center; }
   .barcode-card canvas { max-width: 100%; background: white; border-radius: var(--radius-sm); padding: 8px; }
   @media print {
     body * { visibility: hidden; }
     #print-zone, #print-zone * { visibility: visible; }
-    #print-zone { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    #print-zone { position: fixed; top:50%; left:50%; transform:translate(-50%,-50%); }
   }
 </style>
 </head>
 <body>
 <div class="app-shell">
+
+  <!-- HEADER -->
   <div class="app-header">
-    <div><h1>🍽️ Gtown Inventory</h1><p id="date-display"></p></div>
+    <div class="header-top">
+      <div><h1>🍽️ Gtown Inventory</h1><p id="date-display"></p></div>
+    </div>
+    <div class="branch-selector">
+      <div class="branch-dot" id="branch-dot"></div>
+      <select id="branch-select" onchange="switchBranch()"></select>
+      <button class="btn" style="padding:7px 10px;font-size:12px;white-space:nowrap;" onclick="openBranchModal()">⚙️ Branches</button>
+    </div>
   </div>
+
+  <!-- METRICS -->
   <div class="metrics">
-    <div class="metric"><div class="metric-label">Total items</div><div class="metric-value" id="m-total">0</div></div>
+    <div class="metric"><div class="metric-label">Items</div><div class="metric-value" id="m-total">0</div></div>
     <div class="metric"><div class="metric-label">Low stock</div><div class="metric-value" id="m-low" style="color:var(--warn);">0</div></div>
+    <div class="metric"><div class="metric-label">Expiring</div><div class="metric-value" id="m-exp" style="color:var(--danger);">0</div></div>
     <div class="metric"><div class="metric-label">Scans today</div><div class="metric-value" id="m-scans">0</div></div>
   </div>
+
+  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('inventory')">📦 Stock</button>
     <button class="tab" onclick="showTab('add')">➕ Add</button>
     <button class="tab" onclick="showTab('scan')">📷 Scan</button>
+    <button class="tab" onclick="showTab('total')">🏢 Total</button>
     <button class="tab" onclick="showTab('log')">📋 Log</button>
-    <button class="tab" onclick="showTab('settings')">⚙️ Settings</button>
+    <button class="tab" onclick="showTab('settings')">⚙️</button>
   </div>
 
+  <!-- INVENTORY -->
   <div class="section active" id="tab-inventory">
     <div class="card" style="padding:10px 12px;">
       <div class="row">
         <input type="text" id="search" placeholder="Search..." style="flex:1;margin:0;" oninput="renderInventory()">
-        <select id="filter-cat" style="width:130px;margin:0;" onchange="renderInventory()"><option value="">All</option></select>
+        <select id="filter-cat" style="width:120px;margin:0;" onchange="renderInventory()"><option value="">All</option></select>
       </div>
     </div>
     <div class="card" id="inventory-list"><div class="empty-state">No items yet.<br>Tap "Add" to get started.</div></div>
   </div>
 
+  <!-- ADD ITEM -->
   <div class="section" id="tab-add">
     <div class="card">
       <h3>New inventory item</h3>
+      <p style="font-size:12px;color:var(--info);margin-bottom:12px;">Adding to: <strong id="add-branch-label">-</strong></p>
       <label>Item name</label>
       <input type="text" id="item-name" placeholder="e.g. Frozen fries 2.5kg">
       <div class="grid2">
@@ -147,6 +188,13 @@
       </div>
       <label>Each scan removes</label>
       <input type="number" id="item-step" min="0.1" step="0.1" value="1">
+      <label>Date added / made on</label>
+      <input type="date" id="item-date">
+      <label>Expires after how many days?</label>
+      <div class="row" style="margin-bottom:10px;">
+        <input type="number" id="item-shelf" min="1" step="1" placeholder="e.g. 5 for homemade sauce, 90 for frozen" style="flex:1;margin:0;">
+        <span style="font-size:13px;color:var(--text2);white-space:nowrap;">days</span>
+      </div>
       <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="addItem()">✅ Add item & generate barcode</button>
     </div>
     <div id="barcode-area">
@@ -159,10 +207,11 @@
     </div>
   </div>
 
+  <!-- SCAN -->
   <div class="section" id="tab-scan">
     <div class="card">
       <h3>Scan a barcode</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Point camera at a barcode label from this app.</p>
+      <p style="font-size:12px;color:var(--info);margin-bottom:10px;">Scanning for: <strong id="scan-branch-label">-</strong></p>
       <div id="video-wrap">
         <video id="video" autoplay playsinline muted webkit-playsinline x5-playsinline></video>
         <canvas id="scan-canvas"></canvas>
@@ -181,41 +230,47 @@
         <button class="btn btn-primary" onclick="processCode(document.getElementById('manual-code').value.trim())">Use</button>
       </div>
     </div>
-    <div class="card" id="scan-detail" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div><p style="font-size:11px;color:var(--text2);">Scanned item</p><p style="font-size:16px;font-weight:600;" id="sd-name">-</p></div>
-        <span id="sd-badge" class="badge">-</span>
+  </div>
+
+  <!-- TOTAL VIEW -->
+  <div class="section" id="tab-total">
+    <div class="card" style="padding:10px 14px;">
+      <div class="row" style="justify-content:space-between;">
+        <p style="font-size:14px;font-weight:600;">All branches overview</p>
+        <button class="btn" style="font-size:11px;padding:5px 10px;" onclick="renderTotal()">↻ Refresh</button>
       </div>
-      <div class="grid2" style="margin-bottom:12px;">
-        <div class="metric"><div class="metric-label">Current stock</div><div class="metric-value" id="sd-qty">-</div></div>
-        <div class="metric"><div class="metric-label">Unit</div><div class="metric-value" id="sd-unit" style="font-size:16px;">-</div></div>
-      </div>
-      <label style="margin-bottom:6px;">Manual adjustment</label>
-      <div class="row" style="margin-bottom:8px;">
-        <button class="btn btn-danger" style="flex:1;" onclick="adjustItem('remove')">− Remove</button>
-        <button class="btn btn-success" style="flex:1;" onclick="adjustItem('add')">+ Add</button>
-      </div>
-      <div class="row">
-        <input type="number" id="adj-amt" step="0.1" placeholder="Custom amount..." style="flex:1;margin:0;">
-        <button class="btn btn-primary" onclick="applyAdj()">Apply</button>
-      </div>
+    </div>
+
+    <!-- Warnings -->
+    <div class="card" id="total-warnings">
+      <div class="empty-state" style="padding:16px;">No warnings across branches.</div>
+    </div>
+
+    <!-- Per branch summary -->
+    <div id="total-branch-cards"></div>
+
+    <!-- Combined stock -->
+    <div class="card">
+      <h3>Combined stock (all branches)</h3>
+      <div id="total-combined"></div>
     </div>
   </div>
 
+  <!-- LOG -->
   <div class="section" id="tab-log">
     <div class="card" style="padding:10px 14px;">
       <div class="row" style="justify-content:space-between;">
-        <p style="font-size:14px;font-weight:500;">Usage history</p>
-        <button class="btn btn-danger" style="font-size:12px;padding:5px 10px;" onclick="clearLog()">Clear log</button>
+        <p style="font-size:14px;font-weight:500;">Usage history — <span id="log-branch-label">-</span></p>
+        <button class="btn btn-danger" style="font-size:12px;padding:5px 10px;" onclick="clearLog()">Clear</button>
       </div>
     </div>
     <div class="card" id="log-list"><div class="empty-state">No usage recorded yet.</div></div>
   </div>
 
+  <!-- SETTINGS -->
   <div class="section" id="tab-settings">
     <div class="card">
       <h3>Custom categories</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Add your own categories here.</p>
       <div class="row" style="margin-bottom:10px;">
         <input type="text" id="new-cat-input" placeholder="e.g. Spices, Desserts..." style="flex:1;margin:0;">
         <button class="btn btn-primary" onclick="addCategory()">Add</button>
@@ -224,7 +279,6 @@
     </div>
     <div class="card">
       <h3>Data</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Export a backup of your inventory.</p>
       <div class="row">
         <button class="btn btn-info" style="flex:1;" onclick="exportData()">📤 Export backup</button>
         <button class="btn btn-danger" style="flex:1;" onclick="resetAll()">🗑️ Reset all</button>
@@ -233,6 +287,41 @@
   </div>
 </div>
 
+<!-- SCAN ACTION POPUP -->
+<div class="modal-bg" id="action-modal">
+  <div class="modal">
+    <div style="text-align:center;padding-bottom:6px;">
+      <div style="font-size:28px;margin-bottom:6px;" id="action-icon">📦</div>
+      <div style="font-size:17px;font-weight:600;" id="action-name">-</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:3px;" id="action-qty">-</div>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:10px 12px;margin:12px 0;font-size:12px;color:var(--text2);" id="action-date-info"></div>
+    <p style="font-size:13px;font-weight:600;margin-bottom:10px;text-align:center;">What are you doing?</p>
+    <button class="action-btn action-use" onclick="doScanAction('use')">
+      📤 Using / consuming
+      <div style="font-size:12px;font-weight:400;margin-top:2px;opacity:0.8;">Removes from stock</div>
+    </button>
+    <button class="action-btn action-restock" onclick="showRestockInput()">
+      📥 Restocking / adding
+      <div style="font-size:12px;font-weight:400;margin-top:2px;opacity:0.8;">Adds to stock</div>
+    </button>
+    <div id="restock-input" style="display:none;padding-top:4px;">
+      <label>Amount to add</label>
+      <input type="number" id="restock-amt" min="0.1" step="0.1" placeholder="e.g. 5">
+      <label>New date added (optional)</label>
+      <input type="date" id="restock-date">
+      <label>Shelf life in days (optional, recalculates expiry)</label>
+      <div class="row" style="margin-bottom:10px;">
+        <input type="number" id="restock-shelf" min="1" step="1" placeholder="Leave blank to keep current" style="flex:1;margin:0;">
+        <span style="font-size:13px;color:var(--text2);white-space:nowrap;">days</span>
+      </div>
+      <button class="btn btn-success" style="width:100%;" onclick="doScanAction('restock')">✅ Confirm restock</button>
+    </div>
+    <button class="btn" style="width:100%;margin-top:8px;" onclick="closeActionModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT ITEM MODAL -->
 <div class="modal-bg" id="edit-modal">
   <div class="modal">
     <div class="modal-header">
@@ -253,16 +342,38 @@
     <label>Current quantity</label><input type="number" id="edit-qty" min="0" step="0.1">
     <label>Low stock alert at</label><input type="number" id="edit-low" min="0" step="0.1">
     <label>Each scan removes</label><input type="number" id="edit-step" min="0.1" step="0.1">
-    <p style="font-size:12px;color:var(--text2);margin-bottom:6px;margin-top:2px;">Quick restock</p>
+    <label>Date added / made on</label><input type="date" id="edit-date">
+    <label>Shelf life in days (expiry = date added + this)</label>
+    <div class="row" style="margin-bottom:12px;">
+      <input type="number" id="edit-shelf" min="1" step="1" placeholder="e.g. 5, 30, 90" style="flex:1;margin:0;">
+      <span style="font-size:13px;color:var(--text2);white-space:nowrap;">days</span>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:10px;margin-bottom:12px;font-size:12px;color:var(--text2);" id="edit-expiry-preview"></div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:6px;">Quick restock</p>
     <div class="row" style="margin-bottom:12px;">
       <input type="number" id="edit-add-amt" step="0.1" placeholder="Amount to add..." style="flex:1;margin:0;">
-      <button class="btn btn-success" onclick="quickAddStock()">+ Add stock</button>
+      <button class="btn btn-success" onclick="quickAddStock()">+ Add</button>
     </div>
     <div style="display:flex;gap:8px;">
       <button class="btn btn-primary" style="flex:1;padding:11px;" onclick="saveEdit()">💾 Save</button>
       <button class="btn" style="padding:11px;" onclick="viewItemBarcode()">🏷️</button>
       <button class="btn btn-danger" style="padding:11px;" onclick="deleteEditItem()">🗑️</button>
     </div>
+  </div>
+</div>
+
+<!-- BRANCH MANAGER MODAL -->
+<div class="modal-bg" id="branch-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Manage branches</span>
+      <button class="modal-close" onclick="closeBranchModal()">×</button>
+    </div>
+    <div class="row" style="margin-bottom:12px;">
+      <input type="text" id="new-branch-name" placeholder="Branch name e.g. Downtown" style="flex:1;margin:0;">
+      <button class="btn btn-primary" onclick="addBranch()">Add</button>
+    </div>
+    <div id="branch-list"></div>
   </div>
 </div>
 
@@ -274,103 +385,284 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script>
-let items=[], log=[], scansToday=0, activeId=null, editId=null, customCats=[];
-let cameraStream=null, scanInterval=null, zxingReader=null;
-const DEFAULT_CATS=['meat','vegetables','fries','dairy','drinks','sauces','bread','other'];
-const catEmoji={meat:'🥩',vegetables:'🥦',fries:'🍟',dairy:'🧀',drinks:'🥤',sauces:'🫙',bread:'🍞',other:'📦'};
+// ── STATE ──────────────────────────────────────────────────────────────────
+let branches = [];      // [{id, name, color}]
+let allItems = {};      // {branchId: [items]}
+let allLogs = {};       // {branchId: [logs]}
+let allScans = {};      // {branchId: {date: count}}
+let customCats = [];
+let currentBranch = null;
+let activeId = null, editId = null;
+let cameraStream = null, scanInterval = null, zxingReader = null;
 
-function today(){return new Date().toISOString().slice(0,10);}
-function genId(){return 'RI'+Math.random().toString(36).substr(2,9).toUpperCase();}
-function fmt(n){return parseFloat(parseFloat(n).toFixed(3));}
-function allCats(){return [...DEFAULT_CATS,...customCats];}
-function catLabel(c){return (catEmoji[c]||'🏷️')+' '+c.charAt(0).toUpperCase()+c.slice(1);}
+const BRANCH_COLORS = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16'];
+const DEFAULT_CATS = ['meat','vegetables','fries','dairy','drinks','sauces','bread','other'];
+const catEmoji = {meat:'🥩',vegetables:'🥦',fries:'🍟',dairy:'🧀',drinks:'🥤',sauces:'🫙',bread:'🍞',other:'📦'};
 
-function save(){
-  try{
-    localStorage.setItem('ri_items',JSON.stringify(items));
-    localStorage.setItem('ri_log',JSON.stringify(log));
-    localStorage.setItem('ri_cats',JSON.stringify(customCats));
-    localStorage.setItem('ri_scans_'+today(),scansToday);
-  }catch(e){}
+function today() { return new Date().toISOString().slice(0,10); }
+function genId() { return Math.random().toString(36).substr(2,10).toUpperCase(); }
+function fmt(n) { return parseFloat(parseFloat(n).toFixed(3)); }
+function allCats() { return [...DEFAULT_CATS, ...customCats]; }
+function catLabel(c) { return (catEmoji[c]||'🏷️')+' '+c.charAt(0).toUpperCase()+c.slice(1); }
+
+// ── DATES ──────────────────────────────────────────────────────────────────
+function calcExpiry(madeDate, shelfDays) {
+  if (!madeDate || !shelfDays) return null;
+  const d = new Date(madeDate);
+  d.setDate(d.getDate() + parseInt(shelfDays));
+  return d.toISOString().slice(0,10);
 }
-function load(){
-  try{
-    items=JSON.parse(localStorage.getItem('ri_items')||'[]');
-    log=JSON.parse(localStorage.getItem('ri_log')||'[]');
-    customCats=JSON.parse(localStorage.getItem('ri_cats')||'[]');
-    scansToday=parseInt(localStorage.getItem('ri_scans_'+today())||'0');
-  }catch(e){items=[];log=[];customCats=[];scansToday=0;}
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const diff = new Date(dateStr).setHours(0,0,0,0) - new Date().setHours(0,0,0,0);
+  return Math.ceil(diff / 86400000);
+}
+function daysSince(dateStr) {
+  if (!dateStr) return null;
+  const diff = new Date().setHours(0,0,0,0) - new Date(dateStr).setHours(0,0,0,0);
+  return Math.floor(diff / 86400000);
+}
+function formatDate(d) {
+  if (!d) return '-';
+  return new Date(d).toLocaleDateString('en-DE', {day:'numeric',month:'short',year:'numeric'});
+}
+function expiryBadge(item) {
+  const exp = calcExpiry(item.madeDate, item.shelfDays);
+  if (!exp) {
+    if (item.madeDate) {
+      const age = daysSince(item.madeDate);
+      if (age === 0) return {cls:'badge-fresh', label:'Made today'};
+      if (age <= 3) return {cls:'badge-fresh', label: age+'d old'};
+      if (age <= 7) return {cls:'badge-aging', label: age+'d old'};
+      return {cls:'badge-old', label: age+'d old'};
+    }
+    return null;
+  }
+  const until = daysUntil(exp);
+  if (until < 0) return {cls:'badge-old', label:'⚠️ Expired '+ Math.abs(until)+'d ago'};
+  if (until === 0) return {cls:'badge-old', label:'⚠️ Expires today!'};
+  if (until <= 2) return {cls:'badge-aging', label:'⚠️ Exp. in '+until+'d'};
+  if (until <= 5) return {cls:'badge-aging', label:'Exp. in '+until+'d'};
+  return {cls:'badge-fresh', label:'Exp. '+formatDate(exp)};
+}
+function dateInfoText(item) {
+  const exp = calcExpiry(item.madeDate, item.shelfDays);
+  let lines = [];
+  if (item.madeDate) lines.push('📅 Made/added: '+formatDate(item.madeDate)+' ('+daysSince(item.madeDate)+'d ago)');
+  if (item.shelfDays) lines.push('🕐 Shelf life: '+item.shelfDays+' days');
+  if (exp) {
+    const u = daysUntil(exp);
+    lines.push(u < 0 ? '⚠️ Expired '+Math.abs(u)+' days ago!' : u===0 ? '⚠️ Expires TODAY!' : '✅ Expires: '+formatDate(exp)+' (in '+u+' days)');
+  }
+  return lines.length ? lines.join('\n') : 'No date info set.';
 }
 
-function populateCatSelects(){
-  const cats=allCats();
-  ['item-cat','edit-cat'].forEach(id=>{
-    const el=document.getElementById(id);if(!el)return;
-    const prev=el.value;
-    el.innerHTML=cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
-    if(prev)el.value=prev;
+// ── STORAGE ────────────────────────────────────────────────────────────────
+function save() {
+  try {
+    localStorage.setItem('gi_branches', JSON.stringify(branches));
+    localStorage.setItem('gi_items', JSON.stringify(allItems));
+    localStorage.setItem('gi_logs', JSON.stringify(allLogs));
+    localStorage.setItem('gi_scans', JSON.stringify(allScans));
+    localStorage.setItem('gi_cats', JSON.stringify(customCats));
+    localStorage.setItem('gi_current', currentBranch);
+  } catch(e) {}
+}
+function load() {
+  try {
+    branches = JSON.parse(localStorage.getItem('gi_branches') || '[]');
+    allItems = JSON.parse(localStorage.getItem('gi_items') || '{}');
+    allLogs = JSON.parse(localStorage.getItem('gi_logs') || '{}');
+    allScans = JSON.parse(localStorage.getItem('gi_scans') || '{}');
+    customCats = JSON.parse(localStorage.getItem('gi_cats') || '[]');
+    currentBranch = localStorage.getItem('gi_current') || null;
+  } catch(e) { branches=[]; allItems={}; allLogs={}; allScans={}; customCats=[]; }
+
+  // Create default branch if none exist
+  if (!branches.length) {
+    const id = genId();
+    branches = [{ id, name: 'Branch 1', color: BRANCH_COLORS[0] }];
+    allItems[id] = []; allLogs[id] = []; allScans[id] = {};
+  }
+  if (!currentBranch || !branches.find(b=>b.id===currentBranch)) {
+    currentBranch = branches[0].id;
+  }
+  // Ensure data arrays exist for all branches
+  branches.forEach(b => {
+    if (!allItems[b.id]) allItems[b.id] = [];
+    if (!allLogs[b.id]) allLogs[b.id] = [];
+    if (!allScans[b.id]) allScans[b.id] = {};
   });
-  const fc=document.getElementById('filter-cat');
-  const fp=fc.value;
-  fc.innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
-  if(fp)fc.value=fp;
 }
 
-function renderCatList(){
-  const el=document.getElementById('cat-list');
-  if(!customCats.length){el.innerHTML='<p style="font-size:13px;color:var(--text3);">No custom categories yet.</p>';return;}
-  el.innerHTML=customCats.map((c,i)=>`<div class="row" style="padding:7px 0;border-bottom:0.5px solid var(--border);justify-content:space-between;">
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function items() { return allItems[currentBranch] || []; }
+function logs() { return allLogs[currentBranch] || []; }
+function branch() { return branches.find(b=>b.id===currentBranch); }
+function scansToday() {
+  return (allScans[currentBranch]||{})[today()] || 0;
+}
+function incScans() {
+  if (!allScans[currentBranch]) allScans[currentBranch] = {};
+  allScans[currentBranch][today()] = (allScans[currentBranch][today()]||0) + 1;
+}
+
+// ── BRANCHES ───────────────────────────────────────────────────────────────
+function renderBranchDropdown() {
+  const sel = document.getElementById('branch-select');
+  sel.innerHTML = branches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+  sel.value = currentBranch;
+  const b = branch();
+  if (b) document.getElementById('branch-dot').style.background = b.color;
+}
+
+function switchBranch() {
+  currentBranch = document.getElementById('branch-select').value;
+  const b = branch();
+  if (b) document.getElementById('branch-dot').style.background = b.color;
+  save();
+  renderInventory(); updateMetrics();
+  updateBranchLabels();
+}
+
+function updateBranchLabels() {
+  const name = branch()?.name || '-';
+  document.getElementById('add-branch-label').textContent = name;
+  document.getElementById('scan-branch-label').textContent = name;
+  document.getElementById('log-branch-label').textContent = name;
+}
+
+function openBranchModal() {
+  renderBranchList();
+  document.getElementById('branch-modal').classList.add('open');
+}
+function closeBranchModal() {
+  document.getElementById('branch-modal').classList.remove('open');
+}
+
+function renderBranchList() {
+  const el = document.getElementById('branch-list');
+  el.innerHTML = branches.map((b,i) => `
+    <div class="row" style="padding:8px 0;border-bottom:0.5px solid var(--border);justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:${b.color};flex-shrink:0;"></div>
+        <span style="font-size:14px;font-weight:500;">${b.name}</span>
+        <span style="font-size:11px;color:var(--text3);">${(allItems[b.id]||[]).length} items</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        ${branches.length > 1 ? `<button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteBranch('${b.id}')">Remove</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function addBranch() {
+  const name = document.getElementById('new-branch-name').value.trim();
+  if (!name) return;
+  if (branches.find(b => b.name.toLowerCase() === name.toLowerCase())) { alert('Branch name already exists.'); return; }
+  const id = genId();
+  const color = BRANCH_COLORS[branches.length % BRANCH_COLORS.length];
+  branches.push({ id, name, color });
+  allItems[id] = []; allLogs[id] = []; allScans[id] = {};
+  document.getElementById('new-branch-name').value = '';
+  save(); renderBranchDropdown(); renderBranchList();
+}
+
+function deleteBranch(id) {
+  const b = branches.find(b=>b.id===id);
+  if (!b) return;
+  if (!confirm(`Delete branch "${b.name}"? All its items and log will be lost.`)) return;
+  branches = branches.filter(b=>b.id!==id);
+  delete allItems[id]; delete allLogs[id]; delete allScans[id];
+  if (currentBranch === id) currentBranch = branches[0]?.id || null;
+  save(); renderBranchDropdown(); renderBranchList(); renderInventory(); updateMetrics();
+}
+
+// ── CATEGORIES ─────────────────────────────────────────────────────────────
+function populateCatSelects() {
+  const cats = allCats();
+  ['item-cat','edit-cat'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const prev = el.value;
+    el.innerHTML = cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
+    if (prev) el.value = prev;
+  });
+  const fc = document.getElementById('filter-cat');
+  const fp = fc.value;
+  fc.innerHTML = '<option value="">All categories</option>' + cats.map(c=>`<option value="${c}">${catLabel(c)}</option>`).join('');
+  if (fp) fc.value = fp;
+}
+function renderCatList() {
+  const el = document.getElementById('cat-list');
+  if (!customCats.length) { el.innerHTML='<p style="font-size:13px;color:var(--text3);">No custom categories yet.</p>'; return; }
+  el.innerHTML = customCats.map((c,i)=>`<div class="row" style="padding:7px 0;border-bottom:0.5px solid var(--border);justify-content:space-between;">
     <span style="font-size:14px;">${catLabel(c)}</span>
     <button class="btn btn-danger" style="font-size:12px;padding:4px 10px;" onclick="deleteCat(${i})">Remove</button>
   </div>`).join('');
 }
-
-function addCategory(){
-  const val=document.getElementById('new-cat-input').value.trim().toLowerCase();
-  if(!val)return;
-  if(allCats().includes(val)){alert('Already exists.');return;}
+function addCategory() {
+  const val = document.getElementById('new-cat-input').value.trim().toLowerCase();
+  if (!val) return;
+  if (allCats().includes(val)) { alert('Already exists.'); return; }
   customCats.push(val);
-  document.getElementById('new-cat-input').value='';
-  save();populateCatSelects();renderCatList();
+  document.getElementById('new-cat-input').value = '';
+  save(); populateCatSelects(); renderCatList();
 }
-function deleteCat(i){if(!confirm('Remove?'))return;customCats.splice(i,1);save();populateCatSelects();renderCatList();}
-
-function updateMetrics(){
-  document.getElementById('m-total').textContent=items.length;
-  document.getElementById('m-low').textContent=items.filter(i=>i.qty>0&&i.qty<=i.low).length;
-  document.getElementById('m-scans').textContent=scansToday;
+function deleteCat(i) {
+  if (!confirm('Remove?')) return;
+  customCats.splice(i,1); save(); populateCatSelects(); renderCatList();
 }
 
-function showTab(name){
-  const names=['inventory','add','scan','log','settings'];
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+// ── METRICS ────────────────────────────────────────────────────────────────
+function updateMetrics() {
+  const its = items();
+  const expiring = its.filter(i => {
+    const exp = calcExpiry(i.madeDate, i.shelfDays);
+    if (!exp) return false;
+    const u = daysUntil(exp);
+    return u !== null && u <= 3;
+  }).length;
+  document.getElementById('m-total').textContent = its.length;
+  document.getElementById('m-low').textContent = its.filter(i=>i.qty>0&&i.qty<=i.low).length;
+  document.getElementById('m-exp').textContent = expiring;
+  document.getElementById('m-scans').textContent = scansToday();
+}
+
+// ── TABS ───────────────────────────────────────────────────────────────────
+function showTab(name) {
+  const names = ['inventory','add','scan','total','log','settings'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active', names[i]===name));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  if(name!=='scan')stopCamera();
-  if(name==='inventory')renderInventory();
-  if(name==='log')renderLog();
-  if(name==='settings')renderCatList();
+  if (name !== 'scan') stopCamera();
+  if (name === 'inventory') renderInventory();
+  if (name === 'log') renderLog();
+  if (name === 'settings') renderCatList();
+  if (name === 'total') renderTotal();
   updateMetrics();
 }
 
-function stockStatus(item){
-  if(item.qty<=0)return['badge-empty','Out of stock'];
-  if(item.qty<=item.low)return['badge-low','Low stock'];
-  return['badge-ok','In stock'];
+// ── STOCK STATUS ───────────────────────────────────────────────────────────
+function stockStatus(item) {
+  if (item.qty <= 0) return ['badge-empty','Out of stock'];
+  if (item.qty <= item.low) return ['badge-low','Low stock'];
+  return ['badge-ok','In stock'];
 }
 
-function renderInventory(){
-  const q=document.getElementById('search').value.toLowerCase();
-  const cat=document.getElementById('filter-cat').value;
-  const filtered=items.filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!cat||i.cat===cat));
-  const el=document.getElementById('inventory-list');
-  if(!filtered.length){el.innerHTML='<div class="empty-state">No items found.</div>';return;}
-  el.innerHTML=filtered.map(i=>{
-    const[cls,label]=stockStatus(i);
-    return`<div class="item-row" onclick="openEditModal('${i.id}')">
+// ── INVENTORY ──────────────────────────────────────────────────────────────
+function renderInventory() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const cat = document.getElementById('filter-cat').value;
+  const its = items().filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!cat||i.cat===cat));
+  const el = document.getElementById('inventory-list');
+  if (!its.length) { el.innerHTML='<div class="empty-state">No items yet.<br>Tap "Add" to get started.</div>'; return; }
+  el.innerHTML = its.map(i => {
+    const [cls,label] = stockStatus(i);
+    const eb = expiryBadge(i);
+    const expStr = eb ? `<span class="badge ${eb.cls}" style="font-size:9px;">${eb.label}</span>` : '';
+    return `<div class="item-row" onclick="openEditModal('${i.id}')">
       <div class="item-info">
         <div class="item-name">${i.name}<span class="cat-chip">${i.cat}</span></div>
-        <div class="item-meta">Tap to edit · step: ${i.step} ${i.unit}</div>
+        <div class="item-meta">${expStr} step: ${i.step} ${i.unit}</div>
       </div>
       <div class="item-qty">${i.qty} ${i.unit}</div>
       <span class="badge ${cls}">${label}</span>
@@ -378,161 +670,251 @@ function renderInventory(){
   }).join('');
 }
 
-function addItem(){
-  const name=document.getElementById('item-name').value.trim();
-  if(!name){alert('Please enter an item name.');return;}
-  const qty=fmt(parseFloat(document.getElementById('item-qty').value)||0);
-  const low=fmt(parseFloat(document.getElementById('item-low').value)||1);
-  const step=fmt(parseFloat(document.getElementById('item-step').value)||1);
-  const unit=document.getElementById('item-unit').value;
-  const cat=document.getElementById('item-cat').value;
-  const id=genId();
-  items.push({id,name,cat,unit,qty,low,step});
-  save();updateMetrics();renderBarcodeFor(id,name);
-  document.getElementById('item-name').value='';
-  document.getElementById('item-qty').value='';
-  document.getElementById('item-low').value='';
-  document.getElementById('item-step').value='1';
+// ── ADD ITEM ───────────────────────────────────────────────────────────────
+function addItem() {
+  const name = document.getElementById('item-name').value.trim();
+  if (!name) { alert('Please enter an item name.'); return; }
+  const qty = fmt(parseFloat(document.getElementById('item-qty').value)||0);
+  const low = fmt(parseFloat(document.getElementById('item-low').value)||1);
+  const step = fmt(parseFloat(document.getElementById('item-step').value)||1);
+  const unit = document.getElementById('item-unit').value;
+  const cat = document.getElementById('item-cat').value;
+  const madeDate = document.getElementById('item-date').value || today();
+  const shelfDays = parseInt(document.getElementById('item-shelf').value) || 0;
+  const id = genId();
+  allItems[currentBranch].push({ id, name, cat, unit, qty, low, step, madeDate, shelfDays });
+  save(); updateMetrics(); renderBarcodeFor(id, name);
+  ['item-name','item-qty','item-low','item-shelf'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('item-step').value = '1';
+  document.getElementById('item-date').value = today();
 }
 
-function renderBarcodeFor(id,name){
-  document.getElementById('barcode-area').style.display='block';
-  document.getElementById('barcode-label').textContent=name;
-  document.getElementById('barcode-code').textContent=id;
-  setTimeout(()=>{try{JsBarcode('#bc',id,{format:'CODE128',width:2.2,height:70,displayValue:true,fontSize:13,margin:10});}catch(e){}},80);
+function renderBarcodeFor(id, name) {
+  document.getElementById('barcode-area').style.display = 'block';
+  document.getElementById('barcode-label').textContent = name;
+  document.getElementById('barcode-code').textContent = id;
+  setTimeout(()=>{ try{JsBarcode('#bc',id,{format:'CODE128',width:2.2,height:70,displayValue:true,fontSize:13,margin:10});}catch(e){} },80);
 }
-
-function printBarcode(){
-  const label=document.getElementById('barcode-label').textContent;
-  const code=document.getElementById('barcode-code').textContent;
-  const pz=document.getElementById('print-zone');
-  pz.style.display='block';
-  document.getElementById('print-label').textContent=label;
-  document.getElementById('print-code').textContent=code;
+function printBarcode() {
+  const label = document.getElementById('barcode-label').textContent;
+  const code = document.getElementById('barcode-code').textContent;
+  const pz = document.getElementById('print-zone');
+  pz.style.display = 'block';
+  document.getElementById('print-label').textContent = label;
+  document.getElementById('print-code').textContent = code;
   setTimeout(()=>{
     try{JsBarcode('#print-bc',code,{format:'CODE128',width:3,height:100,displayValue:true,fontSize:16,margin:12});}catch(e){}
     setTimeout(()=>{window.print();pz.style.display='none';},200);
   },100);
 }
 
-// CAMERA — native, works on iOS Safari
-async function startCamera(){
-  const video=document.getElementById('video');
-  const vw=document.getElementById('video-wrap');
-  const sb=document.getElementById('scan-box');
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},
-      audio:false
+// ── TOTAL VIEW ─────────────────────────────────────────────────────────────
+function renderTotal() {
+  // Warnings
+  const warnEl = document.getElementById('total-warnings');
+  let warnings = [];
+  branches.forEach(b => {
+    (allItems[b.id]||[]).forEach(i => {
+      if (i.qty <= 0) warnings.push({branch:b.name, color:b.color, item:i.name, type:'empty', msg:'Out of stock'});
+      else if (i.qty <= i.low) warnings.push({branch:b.name, color:b.color, item:i.name, type:'low', msg:'Low stock ('+i.qty+' '+i.unit+')'});
+      const exp = calcExpiry(i.madeDate, i.shelfDays);
+      if (exp) {
+        const u = daysUntil(exp);
+        if (u !== null && u <= 3) warnings.push({branch:b.name, color:b.color, item:i.name, type:'expiry', msg: u<0?'Expired '+Math.abs(u)+'d ago':u===0?'Expires today!':'Expires in '+u+'d'});
+      }
     });
-    cameraStream=stream;
-    video.srcObject=stream;
-    video.setAttribute('playsinline','');
-    video.setAttribute('webkit-playsinline','');
-    await video.play();
-    vw.style.display='block';
-    sb.style.display='none';
-    startDecoding();
-  }catch(err){
-    alert('Camera error: '+err.message+'\n\nMake sure you allow camera access when prompted.');
+  });
+  if (!warnings.length) {
+    warnEl.innerHTML = '<h3 style="margin-bottom:8px;">⚠️ Warnings</h3><div class="empty-state" style="padding:16px;">All good across branches! ✅</div>';
+  } else {
+    warnEl.innerHTML = '<h3 style="margin-bottom:10px;">⚠️ Warnings ('+warnings.length+')</h3>' +
+      warnings.map(w=>`<div class="warning-row">
+        <div style="width:8px;height:8px;border-radius:50%;background:${w.color};flex-shrink:0;"></div>
+        <div style="flex:1;"><div style="font-weight:500;font-size:13px;">${w.item}</div><div style="font-size:11px;color:var(--text3);">${w.branch}</div></div>
+        <span class="badge ${w.type==='expiry'?'badge-old':w.type==='empty'?'badge-empty':'badge-low'}">${w.msg}</span>
+      </div>`).join('');
   }
+
+  // Per branch cards
+  const bcEl = document.getElementById('total-branch-cards');
+  bcEl.innerHTML = branches.map(b => {
+    const its = allItems[b.id]||[];
+    const lowCount = its.filter(i=>i.qty>0&&i.qty<=i.low).length;
+    const expCount = its.filter(i=>{const exp=calcExpiry(i.madeDate,i.shelfDays);return exp&&daysUntil(exp)<=3;}).length;
+    const todayScans = (allScans[b.id]||{})[today()]||0;
+    return `<div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:${b.color};"></div>
+        <span style="font-size:15px;font-weight:600;">${b.name}</span>
+      </div>
+      <div class="grid3">
+        <div class="metric"><div class="metric-label">Items</div><div class="metric-value">${its.length}</div></div>
+        <div class="metric"><div class="metric-label">Low stock</div><div class="metric-value" style="color:var(--warn);">${lowCount}</div></div>
+        <div class="metric"><div class="metric-label">Expiring</div><div class="metric-value" style="color:var(--danger);">${expCount}</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text2);">Scans today: <strong>${todayScans}</strong></div>
+    </div>`;
+  }).join('');
+
+  // Combined stock — group by item name across branches
+  const combined = {};
+  branches.forEach(b => {
+    (allItems[b.id]||[]).forEach(i => {
+      const key = i.name.toLowerCase();
+      if (!combined[key]) combined[key] = { name:i.name, cat:i.cat, unit:i.unit, branches:[] };
+      combined[key].branches.push({ branchName:b.name, color:b.color, qty:i.qty, unit:i.unit });
+    });
+  });
+  const combEl = document.getElementById('total-combined');
+  const keys = Object.keys(combined);
+  if (!keys.length) { combEl.innerHTML='<div class="empty-state" style="padding:16px;">No items yet.</div>'; return; }
+  combEl.innerHTML = keys.map(k => {
+    const item = combined[k];
+    const total = item.branches.reduce((s,b)=>s+b.qty,0);
+    return `<div class="total-item-row">
+      <div class="total-item-name">${item.name}<span class="cat-chip">${item.cat}</span>
+        <span style="font-size:12px;font-weight:600;color:var(--text);margin-left:8px;">= ${fmt(total)} ${item.unit} total</span>
+      </div>
+      <div class="branch-bar">
+        ${item.branches.map(b=>`<span class="branch-pill" style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}44;">${b.branchName}: ${b.qty} ${b.unit}</span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
 }
 
+// ── SCAN ───────────────────────────────────────────────────────────────────
+function processCode(code) {
+  if (!code) return;
+  // Search in current branch first, then all branches
+  let item = items().find(i=>i.id===code);
+  let foundBranch = currentBranch;
+  if (!item) {
+    for (const b of branches) {
+      item = (allItems[b.id]||[]).find(i=>i.id===code);
+      if (item) { foundBranch = b.id; break; }
+    }
+  }
+  const fb = document.getElementById('scan-feedback');
+  if (!item) {
+    fb.style.display='block'; fb.style.background='var(--danger-bg)'; fb.style.color='var(--danger)';
+    fb.textContent='❌ Item not found: '+code;
+    return;
+  }
+  if (foundBranch !== currentBranch) {
+    const bName = branches.find(b=>b.id===foundBranch)?.name;
+    fb.style.display='block'; fb.style.background='var(--warn-bg)'; fb.style.color='var(--warn)';
+    fb.textContent='⚠️ This item belongs to branch: '+bName+'. Switching...';
+    currentBranch = foundBranch;
+    document.getElementById('branch-select').value = currentBranch;
+    document.getElementById('branch-dot').style.background = branch()?.color;
+    updateBranchLabels(); save();
+  } else { fb.style.display='none'; }
+  activeId = item.id;
+  document.getElementById('manual-code').value = '';
+  openActionModal(item);
+}
+
+function openActionModal(item) {
+  document.getElementById('action-icon').textContent = catEmoji[item.cat]||'📦';
+  document.getElementById('action-name').textContent = item.name;
+  const [,label] = stockStatus(item);
+  document.getElementById('action-qty').textContent = 'Stock: '+item.qty+' '+item.unit+' · '+label;
+  document.getElementById('action-date-info').textContent = dateInfoText(item);
+  document.getElementById('restock-input').style.display='none';
+  document.getElementById('restock-amt').value='';
+  document.getElementById('restock-date').value='';
+  document.getElementById('restock-shelf').value='';
+  document.getElementById('action-modal').classList.add('open');
+}
+function showRestockInput() {
+  document.getElementById('restock-input').style.display='block';
+  document.getElementById('restock-date').value=today();
+  document.getElementById('restock-amt').focus();
+}
+function doScanAction(type) {
+  const item = items().find(i=>i.id===activeId);
+  if (!item) return;
+  if (type==='use') {
+    item.qty = fmt(Math.max(0, item.qty - item.step));
+    incScans();
+    allLogs[currentBranch].unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'use',amount:-item.step,unit:item.unit,after:item.qty});
+    showFeedback('✅ Used '+item.step+' '+item.unit+' of '+item.name+'. Left: '+item.qty+' '+item.unit,'success');
+  } else {
+    const amt = parseFloat(document.getElementById('restock-amt').value);
+    if (!amt||isNaN(amt)||amt<=0){alert('Enter a valid amount.');return;}
+    item.qty = fmt(item.qty + amt);
+    const nd = document.getElementById('restock-date').value;
+    const ns = parseInt(document.getElementById('restock-shelf').value);
+    if (nd) item.madeDate = nd;
+    if (ns) item.shelfDays = ns;
+    incScans();
+    allLogs[currentBranch].unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'restock',amount:+amt,unit:item.unit,after:item.qty});
+    showFeedback('📥 Added '+amt+' '+item.unit+' to '+item.name+'. Total: '+item.qty+' '+item.unit,'success');
+  }
+  save(); updateMetrics(); closeActionModal(); renderInventory();
+}
+function showFeedback(msg,type) {
+  const fb = document.getElementById('scan-feedback');
+  fb.style.display='block';
+  fb.style.background=type==='success'?'var(--success-bg)':'var(--danger-bg)';
+  fb.style.color=type==='success'?'var(--success)':'var(--danger)';
+  fb.textContent=msg;
+}
+function closeActionModal(){document.getElementById('action-modal').classList.remove('open');}
+
+// ── CAMERA ─────────────────────────────────────────────────────────────────
+async function startCamera(){
+  const video=document.getElementById('video');
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+    cameraStream=stream; video.srcObject=stream;
+    video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+    await video.play();
+    document.getElementById('video-wrap').style.display='block';
+    document.getElementById('scan-box').style.display='none';
+    startDecoding();
+  }catch(err){alert('Camera error: '+err.message);}
+}
 function stopCamera(){
   if(scanInterval){clearInterval(scanInterval);scanInterval=null;}
   if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
-  const video=document.getElementById('video');
-  video.srcObject=null;
+  document.getElementById('video').srcObject=null;
   document.getElementById('video-wrap').style.display='none';
   document.getElementById('scan-box').style.display='block';
 }
-
 async function loadZXing(){
   if(zxingReader)return true;
-  try{
-    const mod=await import('https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/+esm');
-    zxingReader=new mod.BrowserMultiFormatReader();
-    return true;
-  }catch(e){console.error('ZXing failed',e);return false;}
+  try{const mod=await import('https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/+esm');zxingReader=new mod.BrowserMultiFormatReader();return true;}
+  catch(e){return false;}
 }
-
 async function startDecoding(){
   const ok=await loadZXing();
-  if(!ok){alert('Scanner library failed to load. Use manual code entry instead.');return;}
+  if(!ok){alert('Scanner library failed. Use manual entry.');return;}
   const video=document.getElementById('video');
   const canvas=document.getElementById('scan-canvas');
   const ctx=canvas.getContext('2d');
   let lastCode='',lastTime=0;
   scanInterval=setInterval(async()=>{
     if(!cameraStream||video.readyState<2||video.videoWidth===0)return;
-    canvas.width=video.videoWidth;
-    canvas.height=video.videoHeight;
-    ctx.drawImage(video,0,0);
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;ctx.drawImage(video,0,0);
     try{
       const result=await zxingReader.decodeFromCanvas(canvas);
-      if(result){
-        const code=result.getText();
-        const now=Date.now();
-        if(code===lastCode&&now-lastTime<3000)return;
-        lastCode=code;lastTime=now;
-        stopCamera();
-        processCode(code);
-      }
+      if(result){const code=result.getText();const now=Date.now();if(code===lastCode&&now-lastTime<3000)return;lastCode=code;lastTime=now;stopCamera();processCode(code);}
     }catch(e){}
   },500);
 }
 
-function processCode(code){
-  if(!code)return;
-  const item=items.find(i=>i.id===code);
-  const fb=document.getElementById('scan-feedback');
-  const det=document.getElementById('scan-detail');
-  if(!item){
-    fb.style.display='block';fb.style.background='var(--danger-bg)';fb.style.color='var(--danger)';
-    fb.textContent='❌ Item not found: '+code;
-    det.style.display='none';return;
-  }
-  activeId=item.id;
-  item.qty=fmt(Math.max(0,item.qty-item.step));
-  scansToday++;
-  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'scan',amount:-item.step,unit:item.unit,after:item.qty});
-  save();updateMetrics();
-  fb.style.display='block';fb.style.background='var(--success-bg)';fb.style.color='var(--success)';
-  fb.textContent='✅ '+item.name+' — removed '+item.step+' '+item.unit+'. Left: '+item.qty+' '+item.unit;
-  refreshDetail(item);
-  det.style.display='block';
-  document.getElementById('manual-code').value='';
+// ── EDIT MODAL ─────────────────────────────────────────────────────────────
+function updateExpiryPreview(){
+  const d=document.getElementById('edit-date').value;
+  const s=parseInt(document.getElementById('edit-shelf').value);
+  const exp=calcExpiry(d,s);
+  const el=document.getElementById('edit-expiry-preview');
+  if(exp){const u=daysUntil(exp);el.textContent='📅 Expires: '+formatDate(exp)+(u<0?' (expired '+Math.abs(u)+'d ago)':' (in '+u+' days)');}
+  else el.textContent='Set date and shelf life to calculate expiry.';
 }
-
-function refreshDetail(item){
-  document.getElementById('sd-name').textContent=item.name;
-  document.getElementById('sd-qty').textContent=item.qty;
-  document.getElementById('sd-unit').textContent=item.unit;
-  const[cls,label]=stockStatus(item);
-  const b=document.getElementById('sd-badge');
-  b.className='badge '+cls;b.textContent=label;
-}
-
-function adjustItem(type){
-  const item=items.find(i=>i.id===activeId);if(!item)return;
-  const amt=type==='remove'?-item.step:item.step;
-  item.qty=fmt(Math.max(0,item.qty+amt));
-  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:type,amount:amt,unit:item.unit,after:item.qty});
-  save();refreshDetail(item);updateMetrics();
-}
-
-function applyAdj(){
-  const item=items.find(i=>i.id===activeId);if(!item)return;
-  const amt=parseFloat(document.getElementById('adj-amt').value);
-  if(!amt||isNaN(amt))return;
-  item.qty=fmt(Math.max(0,item.qty+amt));
-  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:amt>0?'add':'remove',amount:amt,unit:item.unit,after:item.qty});
-  document.getElementById('adj-amt').value='';
-  save();refreshDetail(item);updateMetrics();
-}
-
 function openEditModal(id){
-  const item=items.find(i=>i.id===id);if(!item)return;
+  const item=items().find(i=>i.id===id);if(!item)return;
   editId=id;
   document.getElementById('edit-name').value=item.name;
   document.getElementById('edit-qty').value=item.qty;
@@ -540,82 +922,95 @@ function openEditModal(id){
   document.getElementById('edit-step').value=item.step;
   document.getElementById('edit-unit').value=item.unit;
   document.getElementById('edit-cat').value=item.cat;
+  document.getElementById('edit-date').value=item.madeDate||'';
+  document.getElementById('edit-shelf').value=item.shelfDays||'';
   document.getElementById('edit-add-amt').value='';
+  updateExpiryPreview();
   document.getElementById('edit-modal').classList.add('open');
 }
-
 function closeModal(){document.getElementById('edit-modal').classList.remove('open');editId=null;}
-
 function saveEdit(){
-  const item=items.find(i=>i.id===editId);if(!item)return;
+  const item=items().find(i=>i.id===editId);if(!item)return;
   item.name=document.getElementById('edit-name').value.trim()||item.name;
   item.cat=document.getElementById('edit-cat').value;
   item.unit=document.getElementById('edit-unit').value;
   item.qty=fmt(parseFloat(document.getElementById('edit-qty').value)||0);
   item.low=fmt(parseFloat(document.getElementById('edit-low').value)||1);
   item.step=fmt(parseFloat(document.getElementById('edit-step').value)||1);
+  item.madeDate=document.getElementById('edit-date').value||'';
+  item.shelfDays=parseInt(document.getElementById('edit-shelf').value)||0;
   save();renderInventory();updateMetrics();closeModal();
 }
-
 function quickAddStock(){
-  const item=items.find(i=>i.id===editId);if(!item)return;
+  const item=items().find(i=>i.id===editId);if(!item)return;
   const amt=parseFloat(document.getElementById('edit-add-amt').value);
-  if(!amt||isNaN(amt)){alert('Enter an amount to add.');return;}
+  if(!amt||isNaN(amt)){alert('Enter an amount.');return;}
   item.qty=fmt(item.qty+amt);
   document.getElementById('edit-qty').value=item.qty;
   document.getElementById('edit-add-amt').value='';
-  log.unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'add',amount:amt,unit:item.unit,after:item.qty});
+  allLogs[currentBranch].unshift({time:new Date().toLocaleString(),name:item.name,cat:item.cat,action:'restock',amount:amt,unit:item.unit,after:item.qty});
   save();updateMetrics();
 }
-
 function viewItemBarcode(){
-  const item=items.find(i=>i.id===editId);if(!item)return;
+  const item=items().find(i=>i.id===editId);if(!item)return;
   closeModal();showTab('add');renderBarcodeFor(item.id,item.name);
 }
-
 function deleteEditItem(){
   if(!confirm('Delete this item?'))return;
-  items=items.filter(i=>i.id!==editId);
+  allItems[currentBranch]=allItems[currentBranch].filter(i=>i.id!==editId);
   save();renderInventory();updateMetrics();closeModal();
 }
 
+// ── LOG ────────────────────────────────────────────────────────────────────
 function renderLog(){
   const el=document.getElementById('log-list');
-  if(!log.length){el.innerHTML='<div class="empty-state">No usage recorded yet.</div>';return;}
-  el.innerHTML=log.slice(0,100).map(l=>{
+  const lg=logs();
+  if(!lg.length){el.innerHTML='<div class="empty-state">No usage recorded yet.</div>';return;}
+  const icons={use:'📤',restock:'📥'};
+  el.innerHTML=lg.slice(0,100).map(l=>{
     const plus=l.amount>0;
     return`<div class="log-row">
-      <div><div style="font-weight:500;">${l.name}</div><div style="font-size:11px;color:var(--text3);">${l.time}</div></div>
+      <div><div style="font-weight:500;">${icons[l.action]||'•'} ${l.name}</div><div style="font-size:10px;color:var(--text3);">${l.time}</div></div>
       <div style="text-align:right;">
         <div style="font-weight:600;color:${plus?'var(--success)':'var(--danger)'};">${plus?'+':''}${l.amount} ${l.unit}</div>
-        <div style="font-size:11px;color:var(--text3);">${l.after} left</div>
+        <div style="font-size:10px;color:var(--text3);">${l.after} left</div>
       </div>
     </div>`;
   }).join('');
 }
+function clearLog(){if(!confirm('Clear log for this branch?'))return;allLogs[currentBranch]=[];save();renderLog();}
 
-function clearLog(){if(!confirm('Clear all usage history?'))return;log=[];save();renderLog();}
-
+// ── DATA ───────────────────────────────────────────────────────────────────
 function exportData(){
-  const data=JSON.stringify({items,log,customCats},null,2);
+  const data=JSON.stringify({branches,allItems,allLogs,allScans,customCats},null,2);
   const blob=new Blob([data],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download='gtown-inventory-'+today()+'.json';
   a.click();
 }
-
 function resetAll(){
-  if(!confirm('Delete ALL items, log and categories?'))return;
-  items=[];log=[];customCats=[];
+  if(!confirm('Delete EVERYTHING across all branches?'))return;
+  branches=[];allItems={};allLogs={};allScans={};customCats=[];
   localStorage.clear();
-  renderInventory();renderLog();renderCatList();updateMetrics();
+  load();renderBranchDropdown();populateCatSelects();renderInventory();updateMetrics();updateBranchLabels();
 }
 
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.getElementById('action-modal').addEventListener('click',function(e){if(e.target===this)closeActionModal();});
 document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('branch-modal').addEventListener('click',function(e){if(e.target===this)closeBranchModal();});
+document.getElementById('edit-date').addEventListener('input',updateExpiryPreview);
+document.getElementById('edit-shelf').addEventListener('input',updateExpiryPreview);
 document.getElementById('date-display').textContent=new Date().toLocaleDateString('en-DE',{weekday:'long',day:'numeric',month:'long'});
+document.getElementById('item-date').value=today();
 
-load();populateCatSelects();renderInventory();updateMetrics();
+load();
+renderBranchDropdown();
+populateCatSelects();
+renderInventory();
+updateMetrics();
+updateBranchLabels();
 </script>
 </body>
 </html>
